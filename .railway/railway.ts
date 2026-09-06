@@ -1,7 +1,7 @@
 import { defineRailway, github, postgres, preserve, project, service, volume } from "railway/iac";
 
 export default defineRailway(() => {
-  const ScottyStack = github("scottylabs-labrador/ScottyStack", {
+  const Meet = github("scottylabs-labrador/Meet", {
     branch: "demo",
     checkSuites: false,
   });
@@ -9,8 +9,8 @@ export default defineRailway(() => {
   const Postgres = postgres("Postgres");
   Postgres.networking = { privateNetworkEndpoint: "postgres" };
   const postgresVolume = volume("postgres-volume");
-  const _scottystackweb = service("@scottystack/web", {
-    source: ScottyStack,
+  const _meetweb = service("@meet/web", {
+    source: Meet,
     build: {
       builder: "DOCKERFILE",
       dockerfilePath: "/apps/web/Dockerfile",
@@ -22,15 +22,15 @@ export default defineRailway(() => {
       ],
     },
     deploy: { sleepApplication: true },
-    networking: { privateNetworkEndpoint: "scottystackweb" },
+    networking: { privateNetworkEndpoint: "meetweb" },
     env: {
       VITE_PUBLIC_POSTHOG_HOST: preserve(),
       VITE_PUBLIC_POSTHOG_KEY: preserve(),
-      VITE_SERVER_URL: "${{@scottystack/server.SERVER_URL}}",
+      VITE_SERVER_URL: "${{@meet/server.SERVER_URL}}",
     },
   });
-  const _scottystackserver = service("@scottystack/server", {
-    source: ScottyStack,
+  const _meetserver = service("@meet/server", {
+    source: Meet,
     build: {
       builder: "DOCKERFILE",
       dockerfilePath: "/apps/server/Dockerfile",
@@ -45,11 +45,11 @@ export default defineRailway(() => {
       preDeployCommand: ["bunx drizzle-kit migrate --config=/app/apps/server/drizzle.config.ts"],
       sleepApplication: true,
     },
-    networking: { privateNetworkEndpoint: "scottystackserver" },
+    networking: { privateNetworkEndpoint: "meetserver" },
     env: {
-      ADMIN_GROUP: "scottystack-admins",
+      ADMIN_GROUP: "meet-admins",
       ALLOWED_ORIGINS_REGEX: "https://stack.scottylabs.org",
-      AUTH_CLIENT_ID: "scottystack-prod",
+      AUTH_CLIENT_ID: "meet-prod",
       AUTH_CLIENT_SECRET: preserve(),
       AUTH_ISSUER: "https://idp.scottylabs.org/realms/labrador",
       AUTH_JWKS_URI: "https://idp.scottylabs.org/realms/labrador/protocol/openid-connect/certs",
@@ -60,7 +60,7 @@ export default defineRailway(() => {
     },
   });
 
-  return project("ScottyStack", {
-    resources: [Postgres, _scottystackweb, _scottystackserver, postgresVolume],
+  return project("Meet", {
+    resources: [Postgres, _meetweb, _meetserver, postgresVolume],
   });
 });
