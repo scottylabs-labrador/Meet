@@ -1,7 +1,7 @@
 import { cleanup } from "@testing-library/react";
 import { afterAll, afterEach, beforeAll, beforeEach, vi } from "vitest";
 
-import { setAdminUsers, setSession } from "./msw/handlers.ts";
+import { setSession } from "./msw/handlers.ts";
 import { server } from "./msw/server.ts";
 
 vi.mock("posthog-js/react", () => ({
@@ -27,7 +27,6 @@ beforeAll(() => {
 
 beforeEach(() => {
   setSession(null);
-  setAdminUsers([]);
 });
 
 afterEach(() => {

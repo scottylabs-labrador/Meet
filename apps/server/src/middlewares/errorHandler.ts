@@ -34,6 +34,13 @@ export class InternalServerError extends HttpError {
   }
 }
 
+export class NotFoundError extends HttpError {
+  constructor(message = "Not found") {
+    super(404, message);
+    this.name = "NotFound";
+  }
+}
+
 // From https://tsoa-community.github.io/docs/error-handling.html
 export function errorHandler(err: unknown, req: Request, res: Response, next: NextFunction) {
   // The authentication errors takes the highest priority

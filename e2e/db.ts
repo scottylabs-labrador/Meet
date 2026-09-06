@@ -2,7 +2,7 @@ import { account, session, user } from "@meet/db/schema";
 import { sql } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/node-postgres";
 
-import { ADMIN_GROUP, DATABASE_URL } from "./config.ts";
+import { DATABASE_URL } from "./config.ts";
 
 export const db = drizzle(DATABASE_URL);
 
@@ -14,16 +14,10 @@ export const alice = {
   sessionToken: "alice-session",
 };
 
-export const adminUser = {
-  id: "admin",
-  name: "Admin",
-  email: "admin@cmu.edu",
-  accountId: "admin-sub",
-  sessionToken: "admin-session",
-};
-
 export async function resetDb() {
-  await db.execute(sql`TRUNCATE TABLE "session", "account", "verification", "user" CASCADE`);
+  await db.execute(
+    sql`TRUNCATE TABLE "session", "account", "verification", "user", "event", "availability" CASCADE`,
+  );
 }
 
 function accessToken(sub: string, groups: string[] = []) {
@@ -74,8 +68,4 @@ export async function seedUser(opts: {
 
 export async function seedAlice() {
   await seedUser(alice);
-}
-
-export async function seedAdmin() {
-  await seedUser({ ...adminUser, groups: [ADMIN_GROUP] });
 }
