@@ -17,7 +17,7 @@
     "lucide-react": "^1.23.0",
     "openapi-fetch": "^0.15.0",
     "openapi-react-query": "^0.5.1",
-    "posthog-js": "^1.360.0",
+    "posthog-js": "^1.426.1",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
     "react-toastify": "^11.0.5",
