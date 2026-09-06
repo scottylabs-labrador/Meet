@@ -2,7 +2,7 @@ import { defineRailway, github, postgres, preserve, project, service, volume } f
 
 export default defineRailway(() => {
   const Meet = github("scottylabs-labrador/Meet", {
-    branch: "demo",
+    branch: "main",
     checkSuites: false,
   });
 
@@ -48,15 +48,15 @@ export default defineRailway(() => {
     networking: { privateNetworkEndpoint: "meetserver" },
     env: {
       ADMIN_GROUP: "meet-admins",
-      ALLOWED_ORIGINS_REGEX: "https://stack.scottylabs.org",
+      ALLOWED_ORIGINS_REGEX: "https://meet.scottylabs.org",
       AUTH_CLIENT_ID: "meet-prod",
       AUTH_CLIENT_SECRET: preserve(),
       AUTH_ISSUER: "https://idp.scottylabs.org/realms/labrador",
       AUTH_JWKS_URI: "https://idp.scottylabs.org/realms/labrador/protocol/openid-connect/certs",
-      BETTER_AUTH_URL: "https://stack.scottylabs.org",
+      BETTER_AUTH_URL: "https://meet.scottylabs.org",
       DATABASE_URL: "${{Postgres.DATABASE_URL}}",
       SENTRY_DSN: preserve(),
-      SERVER_URL: "https://api.stack.scottylabs.org",
+      SERVER_URL: "https://api.meet.scottylabs.org",
     },
   });
 
